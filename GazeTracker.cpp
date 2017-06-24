@@ -17,7 +17,7 @@ GazeTracker::GazeTracker()
 {
 	gazePoint.x = 0;
 	gazePoint.y = 0;
-	
+	gazePoint.isBlinking=false;
 	_eyeExtractor = NULL;
 	_pointTracker = NULL;
 }
@@ -97,6 +97,7 @@ void GazeTracker::process() {
 		Utils::SharedImage temp2(new cv::Mat(temp->size(), temp->type()), Utils::releaseImage);
 		_calibrationTargetImagesAllFrames.push_back(temp2);
 
+
 		// Repeat for left eye
 		temp = new cv::Mat(EyeExtractor::eyeSize, CV_32FC1);
 		_eyeExtractor->eyeFloatLeft.copyTo(*temp);
@@ -118,7 +119,7 @@ void GazeTracker::updateEstimations() {
         
 		gazePoint.x = (_gaussianProcessX->getmean(Utils::SharedImage(image, &ignore)) + _gaussianProcessXLeft->getmean(Utils::SharedImage(leftImage, &ignore))) / 2;
 		gazePoint.y = (_gaussianProcessY->getmean(Utils::SharedImage(image, &ignore)) + _gaussianProcessYLeft->getmean(Utils::SharedImage(leftImage, &ignore))) / 2;
-
+		gazePoint.isBlinking=_eyeExtractor->isBlinking();
 		// Make sure estimation stays in the screen area
 		Utils::boundToScreenArea(gazePoint);
 	}

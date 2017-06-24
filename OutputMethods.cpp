@@ -1,7 +1,6 @@
 #include <arpa/inet.h>
 #include <sys/mman.h>
 #include <fcntl.h>
-
 #include "OutputMethods.h"
 #include "Application.h"
 
@@ -56,8 +55,10 @@ SocketStore::~SocketStore(void) {
 
 void SocketStore::store() {
 	std::ostringstream stream;
+	EyeExtractor* a = new EyeExtractor(true);
 	stream  << "x " << (int) Application::Data::gazePoints[0].x << std::endl 
-			<< "y " << (int) Application::Data::gazePoints[0].y << std::endl;
+			<< "y " << (int) Application::Data::gazePoints[0].y << std::endl
+			<< "blink" << (a->isBlinking()? 1 : 0) << std::endl;
 	std::string str = stream.str();
 	sendto(_mySocket, str.c_str(), str.size(), 0, (sockaddr *)&_destAddr, sizeof(_destAddr));
 }

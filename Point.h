@@ -3,6 +3,7 @@
 struct Point {
 	double x;
 	double y;
+	bool isBlinking;
 
 	Point();
 	Point(double x, double y);

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <netinet/in.h>
-
+#include "BlinkDetector.h"
 #include "GazeTracker.h"
 
 class AbstractStore {
